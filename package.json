@@ -1,14 +1,22 @@
 {
   "name": "@yuuza/webbuild",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "bin": {
-    "webbuild": "./dist/cli.js"
+    "webbuild": "dist/cli.js"
   },
+  "types": "src/index.ts",
   "scripts": {
     "build": "tsc"
   },
+  "files": [
+    "dist/",
+    "src/"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
