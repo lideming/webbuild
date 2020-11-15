@@ -1,10 +1,10 @@
 # `webbuild`
 
-A build toolchain based on Rollup and Typescript.
+A build toolchain for Web frontend projects, based on Rollup and TypeScript.
 
 It supports TypeScript with ES modules by default.
 
-## Installation
+## Install
 
 ### Install to the project
 

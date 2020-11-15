@@ -5,18 +5,34 @@ import { build, Config } from "./builder";
 
 const configPath = cwd() + '/buildconfig.js';
 
-stat(configPath).then((s) => {
-    return s.isFile();
-}, (e) => {
-    if (e.code === 'ENOENT') {
-        return false;
+async function main() {
+    let watchMode = false;
+
+    switch (process.argv[2]) {
+        case undefined:
+        case "build":
+            break;
+        case "watch":
+            watchMode = true;
+            break;
+        default:
+            throw new Error(`Unknown sub-command "${process.argv[2]}"`);
     }
-}).then(s => {
-    if (s) {
-        return import(configPath).then(x => x.default)
+
+
+    let configFileExists = false;
+    try {
+        configFileExists = (await stat(configPath)).isFile();
+    } catch (e) { }
+
+    let config = {};
+    if (configFileExists) {
+        config = (await import(configPath)).default;
     }
-    return {};
-}).then(c => {
-    const config = c as Config;
-    return build(config);
-})
+
+    if (!(config instanceof Array))
+        config = [config]
+    await Promise.all((config as any[]).map(x => build(x, watchMode))) as any;
+}
+
+main();
