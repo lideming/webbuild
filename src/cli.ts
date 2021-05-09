@@ -6,20 +6,21 @@ import { build, Config } from "./builder";
 const configPath = cwd() + '/buildconfig.js';
 
 async function main() {
-    let watchMode = false;
-
     switch (process.argv[2]) {
         case undefined:
         case "build":
+            await cliBuild(false);
             break;
         case "watch":
-            watchMode = true;
+            await cliBuild(true);
             break;
         default:
-            throw new Error(`Unknown sub-command "${process.argv[2]}"`);
+            console.error(`Unknown sub-command "${process.argv[2]}"`);
+            help();
     }
+}
 
-
+async function cliBuild(watchMode: boolean) {
     let configFileExists = false;
     try {
         configFileExists = (await stat(configPath)).isFile();
@@ -33,6 +34,16 @@ async function main() {
     if (!(config instanceof Array))
         config = [config]
     await Promise.all((config as any[]).map(x => build(x, watchMode))) as any;
+}
+
+function help() {
+    console.info(`
+Usage: webbuild <sub-command>
+
+Sub-commands:
+    build   - Build the project under the current directory
+    watch   - Build it and watch for changes
+    `.trim())
 }
 
 main();
