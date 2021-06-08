@@ -26,11 +26,10 @@ Add `scripts` in `package.json` to enable `npm run build`
 $ npm i -g @yuuza/webbuild
 ```
 
-## Configure
+## Configure for your project
 
-It uses the `buildconfig.js` file as the configuration.
+Example `buildconfig.js` (also the default):
 
-Example (also the default):
 ```js
 module.exports = {
     input: './main.ts',
@@ -41,12 +40,14 @@ module.exports = {
 };
 ```
 
-## Start build
+## Start building your project
 
 ```shell
 $ npm run build
 ```
+
 or
+
 ```shell
 $ webbuild
 ```
