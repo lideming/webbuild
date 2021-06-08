@@ -19,6 +19,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.7.3
         
       - name: Use Node.js 12.x
         uses: actions/setup-node@v2
@@ -33,18 +37,18 @@ jobs:
           path: |
             node_modules
             package-lock.json
-          key: ${{ runner.os }}-${{ hashFiles('package.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install npm dependencies
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
         run: |
-          npm i
+          pnpm install --frozen-lockfile
 
       - name: Build
         run: |
-          npm run build
+          pnpm run build
 
       - name: Publish to npm registry
-        run: npm publish
+        run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
